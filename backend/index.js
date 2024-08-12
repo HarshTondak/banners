@@ -3,6 +3,7 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
@@ -25,12 +26,16 @@ const upload = multer({
   storage: storage,
 });
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "bannerdb",
-});
+const db_url = `mysql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`;
+
+const db = mysql.createConnection(db_url);
+
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "",
+//   database: "bannerdb",
+// });
 
 db.connect((err) => {
   if (err) {
